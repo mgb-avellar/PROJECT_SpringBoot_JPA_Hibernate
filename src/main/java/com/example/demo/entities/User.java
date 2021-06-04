@@ -1,13 +1,32 @@
 package com.example.demo.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
+/*
+    Esta observação faz parte da terceira aula (310), após a criação desta entidade (User)
+        e seu Resource.
+    É preciso inserir algumas annotations do JPA para instruí-lo a como converter
+        os objetos para o modelo relacional.
+
+    @Entity : instrui o JPA que a classe User é uma entidade;
+    @Id : instrui o JPA qual é a chave primária da tabela do banco de dados (no nosso caso, o ID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) : instrui o JPA que a chave é autoincrementável
+        no banco de dados.
+ */
+
+@Entity
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     // Basic attributes
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
