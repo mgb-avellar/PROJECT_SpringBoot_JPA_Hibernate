@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class User implements Serializable {
     // (ainda não, pois essa é a primeira que estamos criando no momento da redação deste código)
     // Feita na aula 314
 
+    @JsonIgnore  // Evita um loop infinito de User chamar Order que chama User etc. Eu poderia colocar isso também em Order.
     @OneToMany(mappedBy = "client") // Aqui resolvo a associação um para muitos (Ver comentários em Order)
     private List<Order> orders = new ArrayList<>(); // Instancio porque é uma coleção; também preciso de um getter
 
