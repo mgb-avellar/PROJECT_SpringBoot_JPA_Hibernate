@@ -1,10 +1,9 @@
 package com.example.demo.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /*
@@ -20,6 +19,7 @@ import java.util.Objects;
  */
 
 @Entity
+@Table(name = "tb_user") // Esta anotação evita conflito de nomes de tabelas com palavras reservadas do SQL
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +35,11 @@ public class User implements Serializable {
 
     // Associations (instantiate collections)
     // (ainda não, pois essa é a primeira que estamos criando no momento da redação deste código)
+    // Feita na aula 314
+
+    @OneToMany(mappedBy = "client") // Aqui resolvo a associação um para muitos (Ver comentários em Order)
+    private List<Order> orders = new ArrayList<>(); // Instancio porque é uma coleção; também preciso de um getter
+
 
     // Constructor (precisamos de um vazio também, pois estamos usando framework)
     public User () {
@@ -60,6 +65,8 @@ public class User implements Serializable {
     public void setPhone(String phone) { this.phone = phone; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public List<Order> getOrders() { return orders; }
 
     // HashCodes and Equals
     // Aqui colocamos os atributos que quisermos para comparar dois objetos
