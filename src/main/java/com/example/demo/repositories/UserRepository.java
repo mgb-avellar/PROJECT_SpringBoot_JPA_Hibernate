@@ -3,6 +3,13 @@ package com.example.demo.repositories;
 import com.example.demo.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/*
+    Eu poderia colocar aqui a anotação @Repository (ver comentário em UserService) para
+        fazer um registro de componente ('component registration'). No entanto, neste caso
+        específico, não preciso, pois UserRepository estende o JpaRepository que já está
+        registrado no Spring.
+ */
+
 public interface UserRepository extends JpaRepository<User, Long> {
 }
 

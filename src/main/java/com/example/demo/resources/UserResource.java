@@ -1,10 +1,15 @@
 package com.example.demo.resources;
 
 import com.example.demo.entities.User;
+import com.example.demo.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping (value = "/users")
@@ -18,8 +23,11 @@ public class UserResource {
     // Inicialmente, faremos uma implementação básica para teste. Mais para frente,
     //   melhoraremos isso.
 
+    @Autowired
+    private UserService service;
+
     @GetMapping
-    public ResponseEntity<User> findAll() {
+    public ResponseEntity<List<User>> findAll() {
 
         /*
             Esse método retorna o tipo 'ResponseEntity<T>' que é um tipo específico do Spring para retornar
@@ -27,7 +35,22 @@ public class UserResource {
             A annotation 'GetMapping' especifica que esse método responde a uma requisição do tipo GET do HTTP.
          */
 
-        User u = new User(1L, "Maria", "maria@gmail.com", "99999", "12345");
-        return ResponseEntity.ok().body(u);
+        // User u = new User(1L, "Maria", "maria@gmail.com", "99999", "12345");
+        /*
+            A linha comentada acima deve-se à criação do método findAll() em UserService.
+            O código abaixo é a atualização demandada no UserService.
+            Também é demanda do UserService uma injeção de dependência como 'private UserService service;'
+                colocada antes do @GetMapping
+         */
+
+        List<User> list = service.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+
+    // O endpoint abaixo encontra um usuário por Id no banco de dados
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> findById(@PathVariable Long id) {
+        User obj = service.findById(id);
+        return ResponseEntity.ok().body(obj);
     }
 }
