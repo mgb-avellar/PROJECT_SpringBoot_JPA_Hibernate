@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.example.demo.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
@@ -21,6 +22,15 @@ public class Order implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
     private Instant moment;
 
+    /*
+    As linha de código a seguir advêm da aula 315, quando da definição do ENUM
+     */
+
+    // private OrderStatus orderStatus; vamos comentar essa linha, pois queremos forçar o banco de dados a gravar um Integer
+    private Integer orderStatus; // Isso levará a um erro no construtor:
+                                 // precisamos converter esse Interger em OrderStatus (vide modificação no get e no set)
+                                 // (vide modificação no construtor também)
+
     // Criando associações (um pedido tem um cliente (usuário) e um usuário tem vários pedidos) (Ver o planejamento no PDF)
     // Isso implica em criar uma lista de orders em User
     // Aqui, resolvemos a parte muitos para um; lá na classe User, resolvemos a parte um para muitos
@@ -34,9 +44,11 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(Long id, Instant moment, User client) {
+    public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
         this.id = id;
         this.moment = moment;
+        //this.orderStatus = orderStatus;
+        setOrderStatus(orderStatus);
         this.client = client;
     }
 
@@ -48,6 +60,18 @@ public class Order implements Serializable {
     public Instant getMoment() { return moment; }
 
     public void setMoment(Instant moment) { this.moment = moment; }
+
+    public OrderStatus getOrderStatus() {
+        // return orderStatus;
+        return OrderStatus.valueOf(orderStatus);
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        // this.orderStatus = orderStatus;
+        if (orderStatus != null) {
+            this.orderStatus = orderStatus.getCode();
+        }
+    }
 
     public User getClient() { return client; }
 
