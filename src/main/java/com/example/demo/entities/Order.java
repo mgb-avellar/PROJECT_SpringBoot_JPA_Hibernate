@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order") // Esta anotação evita conflito de nomes de tabelas com palavras reservadas do SQL
@@ -38,6 +40,15 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "client_id") // Nome da chave estrangeira lá no banco de dados
     private User client;
+
+    // As linhas abaixo vêm da aula 320, pela associação muitos para muitos Order - Products
+    // Porém, uma order pode ter muitos orderItems
+    // Dentro da classe pedido quero ter uma operação getItems para retornar os orderItems associados ao pedido
+    // Note que em OrderItem, temos o 'private OrderItemPK id' e, na classe OrderItemPK é que encontramos
+    //   a associação muitos para um entre order e items
+    @OneToMany(mappedBy = "id.order")
+    private Set<OrderItem> items = new HashSet<>();
+
 
     // Construtor
 
@@ -76,6 +87,11 @@ public class Order implements Serializable {
     public User getClient() { return client; }
 
     public void setClient(User client) { this.client = client; }
+
+    // Criando manualmente o getItems da aula 320: o pedido agora reconhece os itens dele.
+    public Set<OrderItem> getItems() {
+        return items;
+    }
 
     // HashCode e Equals
 

@@ -1,6 +1,7 @@
 package com.example.demo.entities;
 
 import com.example.demo.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ public class OrderItem implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrderItemPK id;  // Aqui usamos o identificador da classe auxiliar
+    private OrderItemPK id = new OrderItemPK();  // Aqui usamos o identificador da classe auxiliar
 
     private Integer quantity;
     private Double price;
@@ -51,6 +52,7 @@ public class OrderItem implements Serializable {
 
     // Abaixo, o Getter e Setter, para o Order e o Product via id do tipo OrderItemPK
 
+    @JsonIgnore // Para evitar o loop infinito do Json, pois no Java EE o que conta são od Getters
     public Order getOrder() {
         return id.getOrder();
     }
