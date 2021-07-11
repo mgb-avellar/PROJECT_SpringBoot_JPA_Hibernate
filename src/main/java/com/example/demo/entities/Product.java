@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -35,6 +37,10 @@ public class Product implements Serializable {
     private Set<Category> categories = new HashSet<>(); // Set é uma interface e por isso precisamos instanciar uma classe.
                                                         // Aliás, precisamos instanciar para que o conjunto não inicie nulo, mas sim vazio.
 
+    // Mapeamento de um produto para muitos pedidos (Order) no qual ele participa, mas a associação é indireta, passa por OrderItem
+    @OneToMany(mappedBy = "id.product") // 'id' vem de OrderItem; o product vem de OrderItemPK
+    private Set<OrderItem> items = new HashSet<>();
+
     public Product() {
 
     }
@@ -68,6 +74,16 @@ public class Product implements Serializable {
     public void setImgUrl(String imgUrl) { this.imgUrl = imgUrl; }
 
     public Set<Category> getCategories() { return categories; }
+
+    // Método Get para os pedidos (Orders) associados aos produtos, via OrderItem
+    @JsonIgnore // Para evitar o loop infinito do Json, pois no Java EE o que conta são od Getters
+    public Set<Order> getOrders(){
+        Set<Order> set = new HashSet<>();
+        for (OrderItem x : items) {
+            set.add(x.getOrder());
+        }
+        return set;
+    }
 
     @Override
     public boolean equals(Object o) {
