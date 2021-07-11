@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,7 +20,11 @@ public class Category implements Serializable {
     private String name;
 
     // Associação com a classe Product: aula 317
-    @Transient // Provisório, para evitar que o JPA tente interpretar isso daqui, pois na aula 317, sem isso, dá erro.
+    //@Transient // Provisório, para evitar que o JPA tente interpretar isso daqui, pois na aula 317, sem isso, dá erro.
+    @ManyToMany(mappedBy = "categories")
+    // As anotações acima dão conta da relação muitos para muitos entre produtos e categorias.
+    // Note que em mappedBy, o nome entre aspas é o nome da coleção lá na classe Product (linha 35).
+    @JsonIgnore // Para evitar o loop infinito no postman
     private Set<Product> products = new HashSet<>();
 
     public Category() {

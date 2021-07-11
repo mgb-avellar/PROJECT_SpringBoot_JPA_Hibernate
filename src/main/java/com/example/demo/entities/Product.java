@@ -25,7 +25,13 @@ public class Product implements Serializable {
     // Usaremos o Set, não List, como nas classes feitas anteriormente para garantir que não teremos um produto
     //   com várias ocorrências da mesma categoria
 
-    @Transient // Provisório, para evitar que o JPA tente interpretar isso daqui, pois na aula 317, sem isso, dá erro.
+    //@Transient // Provisório, para evitar que o JPA tente interpretar isso daqui, pois na aula 317, sem isso, dá erro.
+    @ManyToMany
+    @JoinTable(name = "tb_product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    // As anotações acima dão conta da relação muitos para muitos entre produtos e categorias.
+    // Esse tipo de associação deve ser feita nas duas pontas: na classe Product (esta) e na Category
     private Set<Category> categories = new HashSet<>(); // Set é uma interface e por isso precisamos instanciar uma classe.
                                                         // Aliás, precisamos instanciar para que o conjunto não inicie nulo, mas sim vazio.
 
