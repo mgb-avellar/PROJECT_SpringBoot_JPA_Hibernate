@@ -4,11 +4,10 @@ import com.example.demo.entities.User;
 import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -53,4 +52,18 @@ public class UserResource {
         User obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
+
+    // Criando o endpoint para a inserção de um usuário. Note que não usaremos a operação GET do HTTP, como fizemos nos endpoints acima
+    @PostMapping
+    public ResponseEntity<User> insert(@RequestBody User obj) {
+        obj = service.insert(obj);
+        // return ResponseEntity.ok().body(obj);  // Provisoriamente na aula 324 (esse return devolve um código HTTP 200,
+                                                  //   e o melhor para nós é que seja o 201)
+
+        // A diferença é que para retornar o código 201, precisamos de uma URI com um cabeçalho, como fazemos abaixo:
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).body(obj);
+    }
+
+
 }

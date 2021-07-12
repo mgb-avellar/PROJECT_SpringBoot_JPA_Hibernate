@@ -38,4 +38,9 @@ public class UserService {
             Com esse método, eu devo atualizar o UserResource.
          */
     }
+
+    // Vamos salvar no banco de dados um dado usuário (ver comentário em UserResource)
+    public User insert(User obj) {
+        return repository.save(obj);
+    }
 }
