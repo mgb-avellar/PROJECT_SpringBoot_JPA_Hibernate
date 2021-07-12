@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,9 +74,15 @@ public class UserService {
 
     // Para atualizar um dado usuário
     public User update(Long id, User obj) {
-        User entity = repository.getById(id); // Na aula, o prof. manda usar o getOne(), mas ele está depreciado e devemos usar o getById().
-        updateData(entity, obj); // Função a ser criada abaixo
-        return repository.save(entity);
+        // Tratamento de exceção da aula 329
+        try {
+            User entity = repository.getById(id); // Na aula, o prof. manda usar o getOne(), mas ele está depreciado e devemos usar o getById().
+            updateData(entity, obj); // Função a ser criada abaixo
+            return repository.save(entity);
+        } catch (EntityNotFoundException e) {
+
+            throw new ResourcesNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User obj) {
