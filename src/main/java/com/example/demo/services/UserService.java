@@ -2,8 +2,11 @@ package com.example.demo.services;
 
 import com.example.demo.entities.User;
 import com.example.demo.repositories.UserRepository;
+import com.example.demo.services.exceptions.DatabaseException;
 import com.example.demo.services.exceptions.ResourcesNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +52,23 @@ public class UserService {
 
     // Vamos deletar um usuário do banco de dados usando seu ID
     public void delete(Long id) {
-        repository.deleteById(id); // Implementação temporária da aula 325
+        // repository.deleteById(id); // Implementação temporária da aula 325
+        // Abaixo, implementação com tratamento de exceção da aula 328
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+
+            throw new ResourcesNotFoundException(id);
+            // A exceção 'EmptyResultDataAccessException' foi capturada depois de verificarmos imprimindo na tela
+            //  com o comando 'catch (RuntimeException e) {e.printStackTrace}' e fazendo a deleção no postman
+            //  Essa metodologia de capturar os erros específicos serve para muitas coisas, e usamos de novo abaixo,
+            //  para o erro específico do framework spring para quando tentamos deletar um usuário com pendências.
+        } catch (DataIntegrityViolationException e) {
+
+            throw new DatabaseException(e.getMessage());
+            // Aqui, no entanto, criaremos uma exceção específica do banco de dados, criando uma nova classe de exceção
+            //   em serviços: 'DatabaseException'. Essa é uma excfeção da nossa camada de serviços.
+        }
     }
 
     // Para atualizar um dado usuário
