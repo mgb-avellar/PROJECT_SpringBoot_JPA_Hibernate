@@ -65,5 +65,13 @@ public class UserResource {
         return ResponseEntity.created(uri).body(obj);
     }
 
+    // Endpoint para deleção
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        // Para o Long id ser reconhecido como uma variável da url, preciso da anotação '@PathVariable'
+        service.delete(id);
+        return ResponseEntity.noContent().build(); // Retorna o código 204, ou seja, resposta com conteúdo vazio.
+    }
+
 
 }
