@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.entities.User;
 import com.example.demo.repositories.UserRepository;
+import com.example.demo.services.exceptions.ResourcesNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +34,12 @@ public class UserService {
     // Criação de um método para recuperar um usuário no banco de dados po ID
     public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
-        return obj.get();
+        // return obj.get();  // Linha comentada na aula 327, tratamento de exceções do findById
         /*
             Com esse método, eu devo atualizar o UserResource.
          */
+        // A seguir, a atualizaçãon da linha de retorno
+        return obj.orElseThrow( () -> new ResourcesNotFoundException(id) );
     }
 
     // Vamos salvar no banco de dados um dado usuário (ver comentário em UserResource)
