@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -25,6 +27,7 @@ public class Payment implements Serializable {
     dependentes e independentes. Note as diferenças das anotações desta classe (dependente) para as
     de Order (independente).
      */
+    @JsonIgnore
     @OneToOne
     @MapsId
     private Order order;

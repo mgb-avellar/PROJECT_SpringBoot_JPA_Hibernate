@@ -69,6 +69,14 @@ public class OrderItem implements Serializable {
         id.setProduct(product);
     }
 
+    // Método subTotal, aula 323
+
+    public Double getSubTotal() {
+        // Lembrando que no Java EE, o que vale é o método get para que um resultado apareça no Json.
+        // Por isso o getSubTotal e não simplesmente subTotal.
+        return price * quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

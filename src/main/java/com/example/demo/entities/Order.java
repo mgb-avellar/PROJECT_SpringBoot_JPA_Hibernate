@@ -106,6 +106,16 @@ public class Order implements Serializable {
 
     public void setPayment(Payment payment) { this.payment = payment; }
 
+    // Método total, aula 323
+    public Double getTotal() {
+        // Lembrando que no Java EE, o que vale é o método get para que um resultado apareça no Json.
+        // Por isso o getTotal e não simplesmente total.
+        double sum = 0.0;
+        for (OrderItem x : items) {
+            sum += x.getSubTotal();
+        }
+        return sum;
+    }
 
     // HashCode e Equals
 
