@@ -49,4 +49,20 @@ public class UserService {
         repository.deleteById(id); // Implementação temporária da aula 325
     }
 
+    // Para atualizar um dado usuário
+    public User update(Long id, User obj) {
+        User entity = repository.getById(id); // Na aula, o prof. manda usar o getOne(), mas ele está depreciado e devemos usar o getById().
+        updateData(entity, obj); // Função a ser criada abaixo
+        return repository.save(entity);
+    }
+
+    private void updateData(User entity, User obj) {
+
+        entity.setName(obj.getName());
+        entity.setEmail(obj.getEmail());
+        entity.setPhone(obj.getPhone());
+
+    }
+
+
 }

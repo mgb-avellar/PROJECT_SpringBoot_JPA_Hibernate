@@ -73,5 +73,10 @@ public class UserResource {
         return ResponseEntity.noContent().build(); // Retorna o código 204, ou seja, resposta com conteúdo vazio.
     }
 
-
+    // Endpoint para atualização de usuário
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj) {
+        obj = service.update(id, obj);
+        return ResponseEntity.ok().body(obj);
+    }
 }
