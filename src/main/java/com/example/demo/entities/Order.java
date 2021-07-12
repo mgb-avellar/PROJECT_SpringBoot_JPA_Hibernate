@@ -49,6 +49,13 @@ public class Order implements Serializable {
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
+    /*
+    Veja as obvervações feitas na classe Payment, da aula 322. Além disso, note o comando 'cascade = CascadeType.ALL':
+    estamos mapeando as duas entidades, em esquema um para um, para terem o mesmo ID (se o pedido tiver id = 5, o pagamento
+    terá de ter o id = 5 também); esse comando permite essa identificação.
+     */
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     // Construtor
 
@@ -92,6 +99,13 @@ public class Order implements Serializable {
     public Set<OrderItem> getItems() {
         return items;
     }
+
+    // A seguir, a associação com Payment, da aula 322
+
+    public Payment getPayment() { return payment; }
+
+    public void setPayment(Payment payment) { this.payment = payment; }
+
 
     // HashCode e Equals
 

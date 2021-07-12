@@ -100,6 +100,14 @@ public class TestConfig implements CommandLineRunner {
 
         orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 
+        // Exemplo de inserção do pagamento da Order o1 (a única que está paga no exemplo acima)
+        // Note a diferença em relação aos exemplos acima: para salvar um objeto dependente em uma relação um para um,
+        //   não chamamos o repository do próprio objeto; fazemos a associação de mão dupla em memória com o comando
+        //   'o1.setPayment(pay1)' e depois salvo o pedido novamente com o comando 'orderRepository.save(o1)'.
+        Payment pay1 = new Payment(null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+        o1.setPayment(pay1);
+
+        orderRepository.save(o1);
     }
 
 }
